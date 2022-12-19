@@ -2,10 +2,13 @@ import {
   Text,
   StyleSheet,
   View,
+  Image,
   ImageBackground,
   Pressable,
   Alert,
+  KeyboardAvoidingView,
 } from "react-native";
+import * as Animatable from "react-native-animatable";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import { useContext, useState } from "react";
@@ -97,74 +100,79 @@ function Signup({ navigation }) {
   return (
     <View style={styles.login}>
       <View style={styles.imgContainer}></View>
-      <View style={styles.loginContainer}>
+      <Animatable.View animation="fadeInUpBig" style={styles.loginContainer}>
         <View style={styles.textStyle}>
           <Text style={styles.text}>Sign up</Text>
         </View>
-        <View style={styles.inputStyle}>
-          <Input
-            label="Email"
-            inputConfig={{
-              keyboardType: "email-address",
-              autoCapitalize: "none",
-              onChangeText: updateInputHandler.bind(this, "email"),
-              value: enteredEmail,
-            }}
-            isValid={credentialsInvalid.email}
-          />
-          <Input
-            label="Confirm Email"
-            inputConfig={{
-              keyboardType: "email-address",
-              autoCapitalize: "none",
-              onChangeText: updateInputHandler.bind(this, "confirmemail"),
-              value: enteredConfirmEmail,
-            }}
-            isValid={credentialsInvalid.confirmEmail}
-          />
-          <Input
-            label="Password"
-            inputConfig={{
-              keyboardType: "default",
-              autoCapitalize: "none",
-              onChangeText: updateInputHandler.bind(this, "password"),
-              value: enteredPassword,
-              secureTextEntry: true,
-            }}
-            isValid={credentialsInvalid.password}
-          />
-          <Input
-            label="Confirm password"
-            inputConfig={{
-              keyboardType: "default",
-              autoCapitalize: "none",
-              onChangeText: updateInputHandler.bind(this, "confirmpassword"),
-              value: enteredConfirmPassword,
-              secureTextEntry: true,
-            }}
-            isValid={credentialsInvalid.confirmPassword}
-          />
-        </View>
-        <View style={styles.create}>
-          <Text style={styles.text1}>Already have an account? </Text>
-          <Pressable
-            onPress={() => {
-              navigation.navigate("Login");
-              setCredentialsInvalid({
-                email: false,
-                confirmEmail: false,
-                password: false,
-                confirmPassword: false,
-              });
-            }}
-          >
-            <Text style={styles.text2}>Login</Text>
-          </Pressable>
-        </View>
-        <View>
-          <Button onPress={submitHandler}>Sign up</Button>
-        </View>
-      </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.container}
+        >
+          <View style={styles.inputStyle}>
+            <Input
+              label="Email"
+              inputConfig={{
+                keyboardType: "email-address",
+                autoCapitalize: "none",
+                onChangeText: updateInputHandler.bind(this, "email"),
+                value: enteredEmail,
+              }}
+              isValid={credentialsInvalid.email}
+            />
+            <Input
+              label="Confirm Email"
+              inputConfig={{
+                keyboardType: "email-address",
+                autoCapitalize: "none",
+                onChangeText: updateInputHandler.bind(this, "confirmemail"),
+                value: enteredConfirmEmail,
+              }}
+              isValid={credentialsInvalid.confirmEmail}
+            />
+            <Input
+              label="Password"
+              inputConfig={{
+                keyboardType: "default",
+                autoCapitalize: "none",
+                onChangeText: updateInputHandler.bind(this, "password"),
+                value: enteredPassword,
+                secureTextEntry: true,
+              }}
+              isValid={credentialsInvalid.password}
+            />
+            <Input
+              label="Confirm password"
+              inputConfig={{
+                keyboardType: "default",
+                autoCapitalize: "none",
+                onChangeText: updateInputHandler.bind(this, "confirmpassword"),
+                value: enteredConfirmPassword,
+                secureTextEntry: true,
+              }}
+              isValid={credentialsInvalid.confirmPassword}
+            />
+          </View>
+          <View style={styles.create}>
+            <Text style={styles.text1}>Already have an account? </Text>
+            <Pressable
+              onPress={() => {
+                navigation.navigate("Login");
+                setCredentialsInvalid({
+                  email: false,
+                  confirmEmail: false,
+                  password: false,
+                  confirmPassword: false,
+                });
+              }}
+            >
+              <Text style={styles.text2}>Login</Text>
+            </Pressable>
+          </View>
+          <View style={styles.alignCenter}>
+            <Button onPress={submitHandler}>Sign up</Button>
+          </View>
+        </KeyboardAvoidingView>
+      </Animatable.View>
     </View>
   );
 }
@@ -184,6 +192,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#4F8A98",
     width: "100%",
     position: "absolute",
+    height: '100%'
   },
   inputStyle: {
     marginTop: 50,
@@ -199,6 +208,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: 250,
     marginBottom: 50,
+    marginLeft: 35,
   },
   text1: {
     fontSize: 15,
@@ -215,6 +225,10 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     overflow: "hidden",
+  },
+  alignCenter: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 export default Signup;

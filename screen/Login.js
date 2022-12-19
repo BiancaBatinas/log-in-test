@@ -2,13 +2,17 @@ import {
   Text,
   StyleSheet,
   View,
+  Image,
   ImageBackground,
   Pressable,
   Alert,
+  KeyboardAvoidingView,
+  Animated,
 } from "react-native";
+import * as Animatable from "react-native-animatable";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import {  useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { autentificare } from "../util/auth";
 import LoadingOverlay from "./LoadingOverlay";
 import { AuthContext } from "../store/auth_context";
@@ -79,65 +83,79 @@ function Login({ navigation }) {
   if (isAuth) {
     return <LoadingOverlay message="Creating user..." />;
   }
+
   return (
     <View style={styles.login}>
       <View style={styles.imgContainer}>
-        <ImageBackground
+        <Animatable.Image
+          animation="bounceIn"
+          duraton="1500"
+          iterationCount={1}
           style={styles.img}
           source={require("../assets/Pngtreebusiness_concept_growth_and_career_7258924.png")}
         />
       </View>
-      <View style={styles.loginContainer}>
+
+      <Animatable.View animation="fadeInUpBig" style={styles.loginContainer}>
         <View style={styles.textStyle}>
-          <Text style={styles.text}>Log in</Text>
+          <Text style={styles.text}>Welcome</Text>
         </View>
-        <View style={styles.inputStyle}>
-          <Input
-            label="Email"
-            inputConfig={{
-              keyboardType: "email-address",
-              autoCapitalize: "none",
-              onChangeText: updateInputHandler.bind(this, "email"),
-              value: enteredEmail,
-            }}
-            isValid={credentialsInvalid.email}
-          />
-          <Input
-            label="Password"
-            inputConfig={{
-              keyboardType: "default",
-              autoCapitalize: "none",
-              onChangeText: updateInputHandler.bind(this, "password"),
-              value: enteredPassword,
-              secureTextEntry: true,
-            }}
-            isValid={credentialsInvalid.password}
-          />
-        </View>
-        <View style={styles.create}>
-          <Text style={styles.text1}> Create an account?</Text>
-          <Pressable
-            onPress={() => {
-              navigation.navigate("Signup");
-              setCredentialsInvalid({
-                email: false,
-                confirmEmail: false,
-                password: false,
-                confirmPassword: false,
-              });
-            }}
-          >
-            <Text style={styles.text2}>SignUp</Text>
-          </Pressable>
-        </View>
-        <View>
-          <Button onPress={submitHandler}>Log in</Button>
-        </View>
-      </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.container}
+        >
+          <View style={styles.inputStyle}>
+            <Input
+              label="Email"
+              inputConfig={{
+                keyboardType: "email-address",
+                autoCapitalize: "none",
+                onChangeText: updateInputHandler.bind(this, "email"),
+                value: enteredEmail,
+              }}
+              isValid={credentialsInvalid.email}
+            />
+            <Input
+              label="Password"
+              inputConfig={{
+                keyboardType: "default",
+                autoCapitalize: "none",
+                onChangeText: updateInputHandler.bind(this, "password"),
+                value: enteredPassword,
+                secureTextEntry: true,
+              }}
+              isValid={credentialsInvalid.password}
+            />
+          </View>
+
+          <View style={styles.create}>
+            <Text style={styles.text1}> Create an account?</Text>
+            <Pressable
+              onPress={() => {
+                navigation.navigate("Signup");
+                setCredentialsInvalid({
+                  email: false,
+                  confirmEmail: false,
+                  password: false,
+                  confirmPassword: false,
+                });
+              }}
+            >
+              <Text style={styles.text2}>SignUp</Text>
+            </Pressable>
+          </View>
+          <View style={styles.alignCenter}>
+            <Button onPress={submitHandler}>Log in</Button>
+          </View>
+        </KeyboardAvoidingView>
+      </Animatable.View>
     </View>
   );
 }
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   loginContainer: {
     justifyContent: "flex-start",
     alignItems: "center",
@@ -152,6 +170,7 @@ const styles = StyleSheet.create({
   login: {
     backgroundColor: "#4F8A98",
     width: "100%",
+    height: "100%",
     position: "absolute",
   },
   inputStyle: {
@@ -168,6 +187,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: 250,
     marginBottom: 50,
+    marginLeft: 35,
   },
   text1: {
     fontSize: 15,
@@ -184,6 +204,10 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     overflow: "hidden",
+  },
+  alignCenter: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 export default Login;
